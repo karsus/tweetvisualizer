@@ -1,0 +1,61 @@
+/**
+    This module deleted old indices based on scheduled job
+**/
+var schedule = require('node-schedule');
+var moment = require('moment');
+var client = require('../esconnection');
+var exports = module.exports = {};
+
+exports.manageIndices = schedule.scheduleJob('0 * * * *', function() {
+    var baseDate = getCurrentTimeMinusTwoHours();
+    var indicesToDelete = getIndicesOfAliasToBeDeleted(baseDate);
+
+});
+
+function getCurrentTimeMinusTwoHours() {
+    var d = new Date();
+    d.setHours(d.getHours() - 2);
+    var dateStr = moment.utc(d).format('YYYY-MM-DD-HH');
+    var baseMoment = moment(dateStr, "YYYY-MM-DD-HH", true);
+    return baseMoment;
+}
+
+function getIndicesOfAliasToBeDeleted(baseMoment) {
+    var indicesToDelete = [];
+    client.cat.aliases({
+            name: "twitterdata",
+            format: "json"
+        },
+        function(success, response) {
+            response.forEach(function(entry) {
+                var dateVal = entry.index.replace("twitter-", "");
+                var indexMoment = moment(dateVal, "YYYY-MM-DD-HH", true);
+                if (indexMoment.isBefore(baseMoment)) {
+                    console.log(entry.index);
+                    indicesToDelete.push(entry.index);
+                }
+                if (indicesToDelete.length > 0) {
+                    deleteOldIndices(indicesToDelete);
+                }
+
+            });
+        },
+        function(error, response) {
+            console.log(error);
+        });
+    
+}
+
+function deleteOldIndices(indicesToDelete) {
+    console.log(indicesToDelete);
+    client.indices.delete({
+            index: indicesToDelete
+
+        }, function(success, response) {
+            console.log("Indices Deleted", response);
+        },
+        function(error, response) {
+            console.log(error);
+        });
+
+}

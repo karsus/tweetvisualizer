@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <title>Tweet Visualization</title>
+      <!-- Bootstrap Core CSS -->
+      <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.min.css">
+      <!-- Custom CSS -->
+      <style>
+         body {
+         padding-top: 70px;
+         /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+         }       
+         text {
+         font: 8px sans-serif;
+         }        
+      </style>
+   </head>
+   <body>
+      <!-- Navigation -->
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+         <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <a class="navbar-brand" href="index.html">Near Real Time Tweets Visualization</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+               <ul class="nav navbar-nav">
+                  <li>
+                     <a href="about.html">About</a>
+                    
+                  </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+                    </li>
+               </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+         </div>
+         <!-- /.container -->
+      </nav>
+      <!-- Page Content -->
+      <div class="container">
+         <h2>Tweet Visualizer App</h2>
+         <p>This application uses the <a href="https://expressjs.com/">Express</a> framework , <a href="http://getbootstrap.com/">Bootstrap</a> and <a href="https://d3js.org/">d3.js</a> to build a tweet visualization app that is deployed to <a href="http://aws.amazon.com">AWS EC2</a>. The application stores data in <a href="http://elastic.co/">Elastic Search</a></p>
+         <h3>Features</h3>
+         <ul>
+            <li>Live tweets for few keywords are indexed in elastic search using logstash</li>
+            <li>App provides UI visualization for the tweets. It provides dynamic charts showing top hash tags</li>
+            <li>Data can be explored using charts</li>
+         </ul>
+           
+        
+      </div>
+      <!-- /.container -->
+      <!-- jQuery Version 1.11.1 -->
+      <script src="javascripts/jquery.js"></script>
+      <!-- Bootstrap Core JavaScript -->
+      <script src="javascripts/bootstrap.min.js"></script>
+   </body>
+</html>

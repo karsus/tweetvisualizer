@@ -1,6 +1,9 @@
 (function() {
     
     var diameter = 800;
+    if(screen.width<800){
+        diameter=screen.width-50;
+    }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var tags={};

@@ -16,11 +16,11 @@
         body {
             padding-top: 70px;
             /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-        }       
+        }
+        
         text {
-            font: 8px sans-serif;
-        }        
-       
+            font: 10px sans-serif;
+        }
     </style>
 </head>
 
@@ -43,12 +43,12 @@
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="about.html">About</a>
-                        
+
                     </li>
                     <li>
                         <a href="contact.html">Contact</a>
                     </li>
-                    
+
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -58,12 +58,38 @@
     <!-- Page Content -->
     <div class="container">
         <div class="row">
-            <h4 class="ui-widget-header">Top Hash Tags for keywords like Trump/Obama/Modi/New Years- Refresh
-              <a href="#">
-              <span id="refresh" class="glyphicon glyphicon-refresh"></span>
-             </a>
-            </h4>      
-            <div id="chart" ></div>
+            <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Used Tag</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Tag already used as filter</strong></p>
+                        </div>
+                        <div class="modal-footer hidden">
+
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="alert alert-info alert-dismissable hidden">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                <strong>Info!</strong> This tag already selected.
+            </div>
+            <ul class="breadcrumb">
+                <li id="hometag">
+                    <a id="home" href="javascript:void(0);">Home</a>
+                </li>
+            </ul>
+            <h4 class="ui-widget-header">Top Hash Tags for keywords like Trump/Obama/Modi/New Years
+            </h4>
+            <div id="chart"></div>
             <!-- /.row -->
         </div>
         <div class="row">

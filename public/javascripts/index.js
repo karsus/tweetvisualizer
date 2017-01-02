@@ -1,12 +1,12 @@
 (function() {
-    
+
     var diameter = 800;
-    if(screen.width<800){
-        diameter=screen.width-50;
+    if (screen.width < 800) {
+        diameter = screen.width - 50;
     }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
-    var tags={};
+    var tags = {};
     var svg = d3.select("#chart")
         .append("svg")
         .attr("width", diameter)
@@ -20,8 +20,10 @@
         var dataset = processData(pts);
         var bubble = d3.pack(dataset)
             .size([diameter, diameter])
+        
             .padding(1.5);
         var nodes = d3.hierarchy(dataset)
+            .sort(function(a,b){return a-b})
             .sum(function(d) {
                 return d.size;
             });
@@ -51,7 +53,9 @@
             });
 
         node.append("a")
-            .attr("xlink:href", function(d) { return "#"; })
+            .attr("xlink:href", function(d) {
+                return "javascript:void(0)";
+            })
             .append("text")
             .attr("dy", ".3em")
             .style("text-anchor", "middle")
@@ -59,42 +63,48 @@
             .style("font-size", function(d) {
                 var len = d.data.name.substring(0, d.r / 3).length;
                 var size = d.r / 3;
-                size *= 3/ len;
+                size *= 4 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })
-           .on("click", function(d) {
-                getData(true,d.data.name);
+            .on("click", function(d) {
+                getData(true, d.data.name);
             })
             .text(function(d) {
-                var display=d.data.name+":"+d.data.size;
+                var display = d.data.name + ":" + d.data.size;
                 return display.substring(0, d.r / 3);
             });
         if (!refresh) {
             d3.select(self.frameElement)
                 .style("height", diameter + "px");
         }
-    } // visualiseIt(pts)
- 
-    function getData(refresh,data) {
-        var url="/api/results";
-            
-        if(data){
-            tags[data]=true; 
-            var tagsArray=[];
-            $.each(tags, function(key, value) { 
+    } 
+    function getData(refresh, data, updateBreadCrumb) {
+        var url = "/api/results";
+        if (data) {
+            if (!updateBreadCrumb&&tags[data]){             
+                $('#myModal').modal('show'); 
+                return;
+              };
+            tags[data] = true;
+            var tagsArray = [];
+            $.each(tags, function(key, value) {
                 tagsArray.push(key);
             });
-            url=url+"?tag="+JSON.stringify(tagsArray);
+            if(!updateBreadCrumb){
+                addBreadCrumb(data, tags);
+            }
+            url = url + "?tag=" + JSON.stringify(tagsArray);
         }
-       
+
         $.ajax({
             url: url,
             dataType: 'json', // Notice! JSONP <-- P (lowercase)
             success: function(json) {
                 // do stuff with json (in this case an array)
                 visualiseIt(json, refresh);
-                fillTable(json,refresh);
+                fillTable(json, refresh);
+                
             },
             error: function() {
                 alert("Error");
@@ -117,34 +127,73 @@
         };
     }
 
-    function fillTable(data,refresh) {
-        if(refresh){
-             $('#tweetstable').bootstrapTable("load",data.table);
-        }else{
-        $('#tweetstable').bootstrapTable({
-            columns: [{
-                    field: 'time',
-                    title: 'Time'
-                }, {
-                    field: 'name',
-                    title: 'User Screen Name'
+    function fillTable(data, refresh) {
+        if (refresh) {
+            $('#tweetstable').bootstrapTable("load", data.table);
+        } else {
+            $('#tweetstable').bootstrapTable({
+                columns: [{
+                        field: 'time',
+                        title: 'Time'
+                    }, {
+                        field: 'name',
+                        title: 'User Screen Name'
+                    },
+                    {
+                        field: 'text',
+                        title: 'Tweet'
+                    }
+                ],
+                formatLoadingMessage: function() {
+                    return '<span class="glyphicon glyphicon glyphicon-repeat glyphicon-animate"></span>';
                 },
-                {
-                    field: 'text',
-                    title: 'Tweet'
-                }
-            ],
-            formatLoadingMessage: function() {
-                return '<span class="glyphicon glyphicon glyphicon-repeat glyphicon-animate"></span>';
-            },
-            data: data.table
-        });
+                data: data.table
+            });
         }
     }
     getData();
-    $('#refresh').on('click', function(e) {
-        tags={};
+  function updateBreadCrumb(data,parents){
+     
+      tags=$.parseJSON(parents); 
+      console.log(tags);
+       $( "ul.breadcrumb li" ).each(function( index,element ) {
+            if(element.id!=="hometag" && !tags[element.id] ){
+                $(this).remove();
+            }
+            
+      });
+      getData(true,data,true);
+
+      
+  }
+    function addBreadCrumb(data, tags) {
+        var json= JSON.stringify(tags);
+        var href =$('<a/>', {
+            text: data,
+            id:json,
+            href: "#",
+            click: function(e,element) {
+               updateBreadCrumb($(this).text(),$(this).attr('id'))
+            }
+        });
+        $('<li/>', {
+            id: data,
+            html: href,
+            "class": 'active'
+        }).appendTo('.breadcrumb')     
+    }
+    $("#home").on('click',function(e){
+        $( "ul.breadcrumb li" ).each(function( index,element ) {
+            if(element.id!=="hometag"){
+                $(this).remove();
+            }
+            
+      });
+        tags = {};
         getData(true);
     });
+    
+    
+
 
 })();

@@ -156,7 +156,7 @@
      
       tags=$.parseJSON(parents); 
       console.log(tags);
-       $( "ul.breadcrumb li" ).each(function( index,element ) {
+       $( "ol.breadcrumb li" ).each(function( index,element ) {
             if(element.id!=="hometag" && !tags[element.id] ){
                 $(this).remove();
             }
@@ -183,7 +183,7 @@
         }).appendTo('.breadcrumb')     
     }
     $("#home").on('click',function(e){
-        $( "ul.breadcrumb li" ).each(function( index,element ) {
+        $( "ol.breadcrumb li" ).each(function( index,element ) {
             if(element.id!=="hometag"){
                 $(this).remove();
             }

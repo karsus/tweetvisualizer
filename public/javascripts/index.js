@@ -1,5 +1,4 @@
 (function() {
-
     var diameter = 800;
     if (screen.width < 800) {
         diameter = screen.width - 50;
@@ -20,10 +19,12 @@
         var dataset = processData(pts);
         var bubble = d3.pack(dataset)
             .size([diameter, diameter])
-        
+
             .padding(1.5);
         var nodes = d3.hierarchy(dataset)
-            .sort(function(a,b){return a-b})
+            .sort(function(a, b) {
+                return a - b
+            })
             .sum(function(d) {
                 return d.size;
             });
@@ -78,20 +79,21 @@
             d3.select(self.frameElement)
                 .style("height", diameter + "px");
         }
-    } 
+    }
+
     function getData(refresh, data, updateBreadCrumb) {
         var url = "/api/results";
         if (data) {
-            if (!updateBreadCrumb&&tags[data]){             
-                $('#myModal').modal('show'); 
+            if (!updateBreadCrumb && tags[data]) {
+                $('#myModal').modal('show');
                 return;
-              };
+            };
             tags[data] = true;
             var tagsArray = [];
             $.each(tags, function(key, value) {
                 tagsArray.push(key);
             });
-            if(!updateBreadCrumb){
+            if (!updateBreadCrumb) {
                 addBreadCrumb(data, tags);
             }
             url = url + "?tag=" + JSON.stringify(tagsArray);
@@ -99,12 +101,12 @@
 
         $.ajax({
             url: url,
-            dataType: 'json', // Notice! JSONP <-- P (lowercase)
+            dataType: 'json', 
+            cache: false,
             success: function(json) {
-                // do stuff with json (in this case an array)
                 visualiseIt(json, refresh);
                 fillTable(json, refresh);
-                
+
             },
             error: function() {
                 alert("Error");
@@ -152,48 +154,46 @@
         }
     }
     getData();
-  function updateBreadCrumb(data,parents){
-     
-      tags=$.parseJSON(parents); 
-      console.log(tags);
-       $( "ol.breadcrumb li" ).each(function( index,element ) {
-            if(element.id!=="hometag" && !tags[element.id] ){
+
+    function updateBreadCrumb(data, parents) {
+
+        tags = $.parseJSON(parents);
+        console.log(tags);
+        $("ol.breadcrumb li").each(function(index, element) {
+            if (element.id !== "hometag" && !tags[element.id]) {
                 $(this).remove();
             }
-            
-      });
-      getData(true,data,true);
 
-      
-  }
+        });
+        getData(true, data, true);
+
+
+    }
+
     function addBreadCrumb(data, tags) {
-        var json= JSON.stringify(tags);
-        var href =$('<a/>', {
+        var json = JSON.stringify(tags);
+        var href = $('<a/>', {
             text: data,
-            id:json,
+            id: json,
             href: "#",
-            click: function(e,element) {
-               updateBreadCrumb($(this).text(),$(this).attr('id'))
+            click: function(e, element) {
+                updateBreadCrumb($(this).text(), $(this).attr('id'))
             }
         });
         $('<li/>', {
             id: data,
             html: href,
             "class": 'active'
-        }).appendTo('.breadcrumb')     
+        }).appendTo('.breadcrumb')
     }
-    $("#home").on('click',function(e){
-        $( "ol.breadcrumb li" ).each(function( index,element ) {
-            if(element.id!=="hometag"){
+    $("#home").on('click', function(e) {
+        $("ol.breadcrumb li").each(function(index, element) {
+            if (element.id !== "hometag") {
                 $(this).remove();
             }
-            
-      });
+
+        });
         tags = {};
         getData(true);
     });
-    
-    
-
-
 })();

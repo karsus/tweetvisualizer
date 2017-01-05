@@ -75,7 +75,7 @@
                 getData(true, d.data.name);
             })
             .text(function(d) {
-                var display = d.data.name + ":" + d.data.size;
+                var display = d.data.name ;
                 return display.substring(0, d.r / 3);
             });
         if (!refresh) {

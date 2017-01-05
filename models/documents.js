@@ -30,10 +30,9 @@ function getQuery(tags) {
     
     if (tags) {
         var filters = buildTermsQuery(tags);
-        query = "{ \"size\": 20, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30 } } } }";
+        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30 } } } }";
     } else {
-        query = "{ \"size\": 20, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } }, { \"term\": {\
-                 \"entities.hashtags.text\": \"maga\" } }, { \"exists\": { \"field\": \"entities.hashtags\" } } ] } },\r\n\r\n\                          \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30 } } } }"
+        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } } ] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30 } } } }"
     }
     console.log(query);
     return query;

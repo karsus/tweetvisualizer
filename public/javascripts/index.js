@@ -49,6 +49,9 @@
             .attr("r", function(d) {
                 return d.r;
             })
+            .on("click", function(d) {
+                getData(true, d.data.name);
+            })
             .style("fill", function(d, i) {
                 return color(i);
             });

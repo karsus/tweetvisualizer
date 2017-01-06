@@ -1,6 +1,6 @@
 (function() {
-    var diameter = 800;
-    if (screen.width < 800) {
+    var diameter = screen.width>1500?960:800;
+    if (screen.width < diameter) {
         diameter = screen.width - 50;
     }
     var format = d3.format(",d"),
@@ -13,21 +13,18 @@
         .attr("class", "bubble");
     // Visualise the data function 
     function visualiseIt(pts, refresh) {
-        if (refresh) {
-            svg.selectAll(".node").remove();
-        }
         var dataset = processData(pts);
         var bubble = d3.pack(dataset)
             .size([diameter, diameter])
-
             .padding(1.5);
         var nodes = d3.hierarchy(dataset)
             .sort(function(a, b) {
-                return a - b
+                return b.data.size - a.data.size
             })
             .sum(function(d) {
                 return d.size;
             });
+
         var node = svg.selectAll(".node")
             .data(bubble(nodes).descendants())
             .enter()
@@ -75,14 +72,127 @@
                 getData(true, d.data.name);
             })
             .text(function(d) {
-                var display = d.data.name ;
+                var display = d.data.name;
                 return display.substring(0, d.r / 3);
             });
-        if (!refresh) {
-            d3.select(self.frameElement)
-                .style("height", diameter + "px");
-        }
+
+        d3.select(self.frameElement)
+            .style("height", diameter + "px");
+
     }
+
+    function changebubble(pts) {
+        svg.selectAll(".hyper").remove();
+        svg.selectAll("a").remove();
+        svg.selectAll("title").remove();
+        var dataset = processData(pts);
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
+        var nodes = d3.hierarchy(dataset)
+            .sort(function(a, b) {
+                return b.data.size - a.data.size
+            })
+            .sum(function(d) {
+                return d.size;
+            });
+
+        var node = svg.selectAll(".node")
+            .data(
+                bubble(nodes).children);
+
+        // capture the enter selection
+        var nodeEnter = node.enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        // re-use enter selection for circles
+        nodeEnter
+            .append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d, i) {
+                return color(i);
+            })
+
+        // re-use enter selection for titles
+        nodeEnter
+            .append("title")
+            .text(function(d) {
+                return d.data.name + ": " + format(d.data.size);
+            });
+        node.append("title")
+            .text(function(d) {
+                return d.data.name + ": " + format(d.data.size);
+            });
+        node.append("a")
+            .attr("xlink:href", function(d) {
+                return "javascript:void(0)";
+            })
+            .append("text")
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .attr("class", "hyper")
+            .style("font-size", function(d) {
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 4 / len;
+                size += 1;
+                return Math.round(size) + 'px';
+            })
+            .on("click", function(d) {
+                getData(true, d.data.name);
+            })
+            .text(function(d) {
+                var display = d.data.name;
+                return display.substring(0, d.r / 3);
+            });
+        nodeEnter.append("a")
+            .attr("xlink:href", function(d) {
+                return "javascript:void(0)";
+            })
+            .append("text")
+            .attr("dy", ".3em")
+            .style("text-anchor", "middle")
+            .attr("class", "hyper")
+            .style("font-size", function(d) {
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 4 / len;
+                size += 1;
+                return Math.round(size) + 'px';
+            })
+            .on("click", function(d) {
+                getData(true, d.data.name);
+            })
+            .text(function(d) {
+                var display = d.data.name;
+                return display.substring(0, d.r / 3);
+            });
+        node.select("circle")
+            .transition().duration(1000)
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d, i) {
+                return color(i);
+            });
+
+        node.transition().attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        node.exit().remove();
+
+
+    }
+
+
 
     function getData(refresh, data, updateBreadCrumb) {
         var url = "/api/results";
@@ -104,10 +214,14 @@
 
         $.ajax({
             url: url,
-            dataType: 'json', 
+            dataType: 'json',
             cache: false,
             success: function(json) {
-                visualiseIt(json, refresh);
+                if (!refresh) {
+                    visualiseIt(json);
+                } else {
+                    changebubble(json);
+                }
                 fillTable(json, refresh);
 
             },
@@ -139,7 +253,10 @@
             $('#tweetstable').bootstrapTable({
                 columns: [{
                         field: 'time',
-                        title: 'Time'
+                        title: 'Time',
+                        formatter:function(value){
+                          return new Date(value);
+                     }
                     }, {
                         field: 'name',
                         title: 'User Screen Name'

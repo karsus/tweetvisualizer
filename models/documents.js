@@ -36,7 +36,7 @@ function getQuery(tags,exclude) {
         var tagsString=JSON.stringify(tags);
         query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30,\"exclude\":"+tagsString+"} } } }";
     } else {
-        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } } ] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30 } } } }"
+        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } } ] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30,\"exclude\":\"porn\" } } } }"
     }
     console.log(query);
     return query;

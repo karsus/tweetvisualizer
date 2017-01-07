@@ -247,7 +247,7 @@
                     },
                     {
                         field: 'name',
-                        title: 'User Screen Name'
+                        title: 'Name'
                     },
                     {
                         field: 'time',

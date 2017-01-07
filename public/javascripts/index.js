@@ -81,6 +81,9 @@
         // re-use enter selection for circles
         nodeEnter
             .append("circle")
+            .on("click", function(d) {
+                getData(true, d.data.name);
+            })
             .attr("r", function(d) {
                 return d.r;
             })
@@ -175,25 +178,23 @@
 
     }
 
-    function getData(refresh, data, updateBreadCrumb,exclude) {
+    function getData(refresh, data, updateBreadCrumb) {
         var url = "/api/results";
-   
+
         if (data) {
-            if (!updateBreadCrumb && tags[data]&&!exclude) {
+            if (!updateBreadCrumb && tags[data]) {
                 $('#myModal').modal('show');
                 return;
             };
-            tags[data] = true;
+            var tagsLocal = $.extend({}, tags);
+            tagsLocal[data]=true;
             var tagsArray = [];
-            $.each(tags, function(key, value) {
+            $.each(tagsLocal, function(key, value) {
                 tagsArray.push(key);
             });
-            if(!updateBreadCrumb&&!exclude){
-             addBreadCrumb(data, tags);
-            
-            }
-            if(!exclude)exclude=false;
-            url = url + "?tag=" + JSON.stringify(tagsArray)+"&exclude="+exclude;
+
+
+            url = url + "?tag=" + JSON.stringify(tagsArray);
         }
 
         $.ajax({
@@ -201,12 +202,12 @@
             dataType: 'json',
             cache: false,
             success: function(json) {
-                if(json.buckets.length==0){
-                  
-                  return getData(refresh, data, updateBreadCrumb,true);
-                 
-                
-            }
+                if(data){
+                    tags[data] = true;
+                    if (!updateBreadCrumb) {
+                        addBreadCrumb(data, tags);
+                    }
+                }
                 visualiseIt(json, refresh);
                 fillTable(json, refresh);
             },
@@ -237,15 +238,15 @@
         } else {
             $('#tweetstable').bootstrapTable({
                 columns: [
-                     
+
                     {
-                        field:'image',
-                        title:'User',
+                        field: 'image',
+                        title: 'User',
                         formatter: function(value) {
-                            return '<div class="cell"><img src='+value +'/></div>';
+                            return '<div class="cell"><img src=' + value + '/></div>';
                         }
                     },
-                    
+
                     {
                         field: 'time',
                         title: 'Time',
@@ -253,7 +254,7 @@
                             return new Date(value);
                         }
                     },
-                    
+
                     {
                         field: 'text',
                         title: 'Tweet'

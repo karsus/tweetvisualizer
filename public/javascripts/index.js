@@ -1,5 +1,5 @@
 (function() {
-    var diameter = screen.width>1500?960:800;
+    var diameter = screen.width > 1500 ? 960 : 800;
     if (screen.width < diameter) {
         diameter = screen.width - 50;
     }
@@ -11,20 +11,8 @@
         .attr("width", diameter)
         .attr("height", diameter)
         .attr("class", "bubble");
-    // Visualise the data function 
-    function visualiseIt(pts, refresh) {
-        var dataset = processData(pts);
-        var bubble = d3.pack(dataset)
-            .size([diameter, diameter])
-            .padding(1.5);
-        var nodes = d3.hierarchy(dataset)
-            .sort(function(a, b) {
-                return b.data.size - a.data.size
-            })
-            .sum(function(d) {
-                return d.size;
-            });
 
+    function buildNode(bubble, nodes, refresh) {
         var node = svg.selectAll(".node")
             .data(bubble(nodes).descendants())
             .enter()
@@ -36,12 +24,6 @@
             .attr("transform", function(d) {
                 return "translate(" + d.x + "," + d.y + ")";
             });
-
-        node.append("title")
-            .text(function(d) {
-                return d.data.name + ": " + d.data.size;
-            });
-
         node.append("circle")
             .attr("r", function(d) {
                 return d.r;
@@ -53,12 +35,20 @@
                 return color(i);
             });
 
+        return node;
+    }
+
+    function addTitleText(node) {
+        node.append("title")
+            .text(function(d) {
+                return d.data.name + ": " + d.data.size;
+            });
         node.append("a")
             .attr("xlink:href", function(d) {
                 return "javascript:void(0)";
             })
             .append("text")
-            .attr("dy", ".3em")
+            .attr("dy", ".5em")
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
@@ -75,16 +65,40 @@
                 var display = d.data.name;
                 return display.substring(0, d.r / 3);
             });
-
-        d3.select(self.frameElement)
-            .style("height", diameter + "px");
-
     }
 
-    function changebubble(pts) {
-        svg.selectAll(".hyper").remove();
-        svg.selectAll("a").remove();
-        svg.selectAll("title").remove();
+    function updateNode(bubble, nodes) {
+        var obj = {};
+        var node = svg.selectAll(".node")
+            .data(
+                bubble(nodes).children);
+        var nodeEnter = node.enter()
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+        // re-use enter selection for circles
+        nodeEnter
+            .append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d, i) {
+                return color(i);
+            });
+        obj.node = node;
+        obj.nodeEnter = nodeEnter;
+        return obj;
+    }
+
+    // Visualise the data function 
+    function visualiseIt(pts, refresh) {
+        if (refresh) {
+            svg.selectAll(".hyper").remove();
+            svg.selectAll("a").remove();
+            svg.selectAll("title").remove();
+        }
         var dataset = processData(pts);
         var bubble = d3.pack(dataset)
             .size([diameter, diameter])
@@ -97,66 +111,36 @@
                 return d.size;
             });
 
-        var node = svg.selectAll(".node")
-            .data(
-                bubble(nodes).children);
+        if (refresh) {
+            // capture the enter selection
+            var obj = updateNode(bubble, nodes);
+            addTitleText(obj.nodeEnter);
+            addTitleText(obj.node);
+            animateChanges(obj.nodeEnter, obj.node)
+        } else {
+            var node = buildNode(bubble, nodes);
 
-        // capture the enter selection
-        var nodeEnter = node.enter()
-            .append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            });
+            addTitleText(node);
+            d3.select(self.frameElement)
+                .style("height", diameter + "px");
 
-        // re-use enter selection for circles
-        nodeEnter
-            .append("circle")
-            .attr("r", function(d) {
-                return d.r;
-            })
-            .style("fill", function(d, i) {
-                return color(i);
-            })
+        }
 
+    }
+
+    function animateChanges(nodeEnter, node) {
         // re-use enter selection for titles
         nodeEnter
             .append("title")
             .text(function(d) {
                 return d.data.name + ": " + format(d.data.size);
             });
-        node.append("title")
-            .text(function(d) {
-                return d.data.name + ": " + format(d.data.size);
-            });
-        node.append("a")
-            .attr("xlink:href", function(d) {
-                return "javascript:void(0)";
-            })
-            .append("text")
-            .attr("dy", ".3em")
-            .style("text-anchor", "middle")
-            .attr("class", "hyper")
-            .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 3).length;
-                var size = d.r / 3;
-                size *= 4 / len;
-                size += 1;
-                return Math.round(size) + 'px';
-            })
-            .on("click", function(d) {
-                getData(true, d.data.name);
-            })
-            .text(function(d) {
-                var display = d.data.name;
-                return display.substring(0, d.r / 3);
-            });
         nodeEnter.append("a")
             .attr("xlink:href", function(d) {
                 return "javascript:void(0)";
             })
             .append("text")
-            .attr("dy", ".3em")
+            .attr("dy", ".5em")
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
@@ -189,15 +173,13 @@
 
         node.exit().remove();
 
-
     }
 
-
-
-    function getData(refresh, data, updateBreadCrumb) {
+    function getData(refresh, data, updateBreadCrumb,exclude) {
         var url = "/api/results";
+   
         if (data) {
-            if (!updateBreadCrumb && tags[data]) {
+            if (!updateBreadCrumb && tags[data]&&!exclude) {
                 $('#myModal').modal('show');
                 return;
             };
@@ -206,10 +188,12 @@
             $.each(tags, function(key, value) {
                 tagsArray.push(key);
             });
-            if (!updateBreadCrumb) {
-                addBreadCrumb(data, tags);
+            if(!updateBreadCrumb&&!exclude){
+             addBreadCrumb(data, tags);
+            
             }
-            url = url + "?tag=" + JSON.stringify(tagsArray);
+            if(!exclude)exclude=false;
+            url = url + "?tag=" + JSON.stringify(tagsArray)+"&exclude="+exclude;
         }
 
         $.ajax({
@@ -217,13 +201,14 @@
             dataType: 'json',
             cache: false,
             success: function(json) {
-                if (!refresh) {
-                    visualiseIt(json);
-                } else {
-                    changebubble(json);
-                }
+                if(json.buckets.length==0){
+                  
+                  return getData(refresh, data, updateBreadCrumb,true);
+                 
+                
+            }
+                visualiseIt(json, refresh);
                 fillTable(json, refresh);
-
             },
             error: function() {
                 alert("Error");
@@ -251,16 +236,27 @@
             $('#tweetstable').bootstrapTable("load", data.table);
         } else {
             $('#tweetstable').bootstrapTable({
-                columns: [{
-                        field: 'time',
-                        title: 'Time',
-                        formatter:function(value){
-                          return new Date(value);
-                     }
-                    }, {
+                columns: [
+                     
+                    {
+                        field:'image',
+                        title:'Profile Pic',
+                        formatter: function(value) {
+                            return '<div class="cell"><img src='+value +'/></div>';
+                        }
+                    },
+                    {
                         field: 'name',
                         title: 'User Screen Name'
                     },
+                    {
+                        field: 'time',
+                        title: 'Time',
+                        formatter: function(value) {
+                            return new Date(value);
+                        }
+                    },
+                    
                     {
                         field: 'text',
                         title: 'Tweet'
@@ -276,9 +272,7 @@
     getData();
 
     function updateBreadCrumb(data, parents) {
-
         tags = $.parseJSON(parents);
-        console.log(tags);
         $("ol.breadcrumb li").each(function(index, element) {
             if (element.id !== "hometag" && !tags[element.id]) {
                 $(this).remove();
@@ -286,8 +280,6 @@
 
         });
         getData(true, data, true);
-
-
     }
 
     function addBreadCrumb(data, tags) {

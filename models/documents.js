@@ -1,6 +1,8 @@
 var express = require('express');
 var Promise = require('promise');
 var client = require('../esconnection');
+var linkify = require('linkifyjs');
+var linkifyHtml = require('linkifyjs/html');
 
 var exports = module.exports = {}
 /**
@@ -8,15 +10,15 @@ var exports = module.exports = {}
     and parses results
 **/
 
-exports.getSearchResults = function(tag) {
+exports.getSearchResults = function(tag,exclude) {
     return new Promise(function(resolve, reject) {
-        console.log("searchresults");
+       
         client.search({
             index: "twitterdata",
-            body: getQuery(tag)
+            body: getQuery(tag,exclude)
         }).then(function(res) {
             var result = processResults(res);
-            console.log(result);
+           
             resolve(result);
         }, function(err) {
             reject(err);
@@ -25,12 +27,14 @@ exports.getSearchResults = function(tag) {
 
 };
 
-function getQuery(tags) {
+function getQuery(tags,exclude) {
     var query = "";
     
     if (tags) {
         var filters = buildTermsQuery(tags);
-        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30 } } } }";
+        if(exclude===true)tags.pop();
+        var tagsString=JSON.stringify(tags);
+        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30,\"exclude\":"+tagsString+"} } } }";
     } else {
         query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } } ] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30 } } } }"
     }
@@ -63,9 +67,10 @@ function processResults(resp) {
     response.forEach(function(result) {
       //  console.log(result);
         var obj = {};
-        obj.text = result._source.text;
+        obj.text = linkifyHtml(result._source.text);
         obj.time = result._source['@timestamp'];
         obj.name = result._source.user.screen_name;
+        obj.image=result._source.user.profile_image_url;
         tableContents.push(obj);
         //console.log(tableContents);
     });

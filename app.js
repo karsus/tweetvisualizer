@@ -31,12 +31,13 @@ app.get("/api/results", function(req, res) {
 
 sendDataUI = function(req, res) {
     var tag = req.query.tag;
+    var exclude = req.query.exclude;
     var tagObj;
     if (tag) {
         console.log(tag);
         tagObj = JSON.parse(tag);
     }
-    documents.getSearchResults(tagObj).then(function(results) {
+    documents.getSearchResults(tagObj,exclude).then(function(results) {
         res.json(results);
     }, function(err) {
         console.log(err);

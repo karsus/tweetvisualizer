@@ -240,15 +240,12 @@
                      
                     {
                         field:'image',
-                        title:'Profile Pic',
+                        title:'User',
                         formatter: function(value) {
                             return '<div class="cell"><img src='+value +'/></div>';
                         }
                     },
-                    {
-                        field: 'name',
-                        title: 'Name'
-                    },
+                    
                     {
                         field: 'time',
                         title: 'Time',

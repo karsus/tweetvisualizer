@@ -52,7 +52,7 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 4).length;
+                var len = d.data.name.substring(0, d.r / 8).length;
                 var size = d.r / 4;
                 size *= 6 / len;
                 size += 1;

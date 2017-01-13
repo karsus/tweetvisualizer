@@ -54,7 +54,7 @@
             .style("font-size", function(d) {
                 var len = d.data.name.substring(0, d.r / 3).length;
                 var size = d.r / 3;
-                size *= 8/ len;
+                size *= 6/ len;
                 size += 1;
                 return Math.round(size) + 'px';
             })
@@ -149,7 +149,7 @@
             .style("font-size", function(d) {
                 var len = d.data.name.substring(0, d.r / 3).length;
                 var size = d.r / 3;
-                size *= 8 / len;
+                size *= 6 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })

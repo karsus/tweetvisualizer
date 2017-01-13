@@ -52,8 +52,8 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 2).length;
-                var size = d.r / 2;
+                var len = d.data.name.substring(0, d.r / 1.5).length;
+                var size = d.r / 1.5;
                 size *= 4/ len;
                 size += 1;
                 return Math.round(size) + 'px';
@@ -147,8 +147,8 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 2).length;
-                var size = d.r / 2;
+                var len = d.data.name.substring(0, d.r / 1.5).length;
+                var size = d.r / 1.5;
                 size *= 4 / len;
                 size += 1;
                 return Math.round(size) + 'px';

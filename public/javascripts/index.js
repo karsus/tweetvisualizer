@@ -149,7 +149,7 @@
             .style("font-size", function(d) {
                 var len = d.data.name.substring(0, d.r / 3).length;
                 var size = d.r / 3;
-                size *= 4 / len;
+                size *= 2 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })

@@ -52,9 +52,9 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 8).length;
-                var size = d.r / 4;
-                size *= 6 / len;
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 10/ len;
                 size += 1;
                 return Math.round(size) + 'px';
             })
@@ -147,9 +147,9 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 4).length;
-                var size = d.r / 4;
-                size *= 6 / len;
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 10 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })

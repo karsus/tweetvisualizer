@@ -52,9 +52,9 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 2).length;
-                var size = d.r / 2;
-                size *= 5/ len;
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 4 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })
@@ -147,9 +147,9 @@
             .style("text-anchor", "middle")
             .attr("class", "hyper")
             .style("font-size", function(d) {
-                var len = d.data.name.substring(0, d.r / 2).length;
-                var size = d.r / 2;
-                size *= 5 / len;
+                var len = d.data.name.substring(0, d.r / 3).length;
+                var size = d.r / 3;
+                size *= 4 / len;
                 size += 1;
                 return Math.round(size) + 'px';
             })
@@ -187,7 +187,7 @@
                 return;
             };
             var tagsLocal = $.extend({}, tags);
-            tagsLocal[data]=true;
+            tagsLocal[data] = true;
             var tagsArray = [];
             $.each(tagsLocal, function(key, value) {
                 tagsArray.push(key);
@@ -202,7 +202,7 @@
             dataType: 'json',
             cache: false,
             success: function(json) {
-                if(data){
+                if (data) {
                     tags[data] = true;
                     if (!updateBreadCrumb) {
                         addBreadCrumb(data, tags);

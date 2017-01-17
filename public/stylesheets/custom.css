@@ -1,27 +1,21 @@
 body {
-            padding-top: 70px;
-            /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-        }
-        
+    padding-top: 70px;
+    /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
 text {
-            font: 24px "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
-        
-        img {
-            height: auto;
-            max-width: 100%;
-        }
-        
-        .cell {
-            display: table-cell;
-        }
-        
-        .cell-fluid {
-            width: 100%;
-        }
-
+    font: 24px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+.cell {
+    display: table-cell;
+}
+.cell-fluid {
+    width: 100%;
+}
 .breadcrumb-arrow {
-     
     height: 36px;
     padding: 0px;
     line-height: 36px;
@@ -33,7 +27,9 @@ text {
     -webkit-border-radius: 4px 0 0 4px;
     -moz-border-radius: 4px 0 0 4px
 }
-.breadcrumb-arrow li, .breadcrumb-arrow li a, .breadcrumb-arrow li span {
+.breadcrumb-arrow li,
+.breadcrumb-arrow li a,
+.breadcrumb-arrow li span {
     display: inline-block;
     vertical-align: top
 }
@@ -47,7 +43,8 @@ text {
 .breadcrumb-arrow li span {
     padding: 0 10px
 }
-.breadcrumb-arrow li a, .breadcrumb-arrow li:not(:first-child) span {
+.breadcrumb-arrow li a,
+.breadcrumb-arrow li:not(:first-child) span {
     height: 36px;
     padding: 0 10px 0 25px;
     line-height: 36px
@@ -65,7 +62,8 @@ text {
 .breadcrumb-arrow li:first-child a {
     padding-left: 10px
 }
-.breadcrumb-arrow li a:after, .breadcrumb-arrow li a:before {
+.breadcrumb-arrow li a:after,
+.breadcrumb-arrow li a:before {
     position: absolute;
     top: -1px;
     width: 0;
@@ -86,11 +84,13 @@ text {
     z-index: 2;
     border-left: 11px solid #2494be
 }
-.breadcrumb-arrow li a:focus, .breadcrumb-arrow li a:hover {
+.breadcrumb-arrow li a:focus,
+.breadcrumb-arrow li a:hover {
     background-color: #4fc1e9;
     border: 1px solid #4fc1e9
 }
-.breadcrumb-arrow li a:focus:before, .breadcrumb-arrow li a:hover:before {
+.breadcrumb-arrow li a:focus:before,
+.breadcrumb-arrow li a:hover:before {
     border-left-color: #4fc1e9
 }
 .breadcrumb-arrow li a:active {

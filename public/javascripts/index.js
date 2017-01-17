@@ -54,7 +54,7 @@ var main = (function() {
     }
 
     function addBreadCrumb(data, tags) {
-        $("ol.breadcrumb-arrow").attr('display','block');
+        
         var json = JSON.stringify(tags);
         var href = $('<a/>', {
             text: data,

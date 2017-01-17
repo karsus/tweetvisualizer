@@ -104,9 +104,7 @@ var chart = (function() {
               .size([diameter, diameter])
               .padding(1.5);
           var nodes = d3.hierarchy(dataset)
-              .sort(function(a, b) {
-                  return b - a
-              })
+             
               .sum(function(d) {
                   return d.size;
               });

@@ -113,8 +113,10 @@ var chart = (function() {
                 return d.r;
             })
             .on("mouseover", function(d) {
-                tooltip.text(d.data.name + ": " + format(d.data.size));
-                tooltip.style("visibility", "visible");
+                if (!isTouchDevice()) {
+                    tooltip.text(d.data.name + ": " + format(d.data.size));
+                    tooltip.style("visibility", "visible");
+                }
             })
             .on("mousemove", function() {
                 return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");

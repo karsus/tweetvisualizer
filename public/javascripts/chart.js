@@ -27,6 +27,10 @@ var chart = (function() {
         .attr("height", diameter)
         .attr("class", "bubble");
 
+    function isTouchDevice() {
+        return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
+    }
+
     function buildNode(bubble, nodes, refresh) {
         var node = svg.selectAll(".node")
             .data(bubble(nodes).descendants())
@@ -44,8 +48,10 @@ var chart = (function() {
                 return d.r;
             })
             .on("mouseover", function(d) {
-                tooltip.text(d.data.name + ": " + format(d.data.size));
-                tooltip.style("visibility", "visible");
+                if (!isTouchDevice()) {
+                    tooltip.text(d.data.name + ": " + format(d.data.size));
+                    tooltip.style("visibility", "visible");
+                }
             })
             .on("mousemove", function() {
                 return tooltip.style("top", (d3.event.pageY - 10) + "px").style("left", (d3.event.pageX + 10) + "px");
@@ -130,7 +136,7 @@ var chart = (function() {
         if (refresh) {
             svg.selectAll(".hyper").remove();
             svg.selectAll("a").remove();
-            
+
         }
         var dataset = processData(pts);
         var bubble = d3.pack(dataset)

@@ -21,11 +21,15 @@ var main = (function() {
             });
             url = url + "?tag=" + JSON.stringify(tagsArray);
         }
+        if(refresh){
+            $(".se-pre-con").fadeIn("slow");
+        }
         $.ajax({
             url: url,
             dataType: 'json',
             cache: false,
             success: function(json) {
+                $(".se-pre-con").fadeOut("slow");;
                 if (data) {
                     tags[data] = true;
                     if (!updateBreadCrumb) {
@@ -54,7 +58,6 @@ var main = (function() {
     }
 
     function addBreadCrumb(data, tags) {
-        
         var json = JSON.stringify(tags);
         var href = $('<a/>', {
             text: data,

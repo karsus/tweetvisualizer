@@ -49,8 +49,8 @@ var main = (function() {
         });
     }
     $(document).ready(function() {
-        module.getData();
         addActiveClass();
+        module.getData();
     });
 
 

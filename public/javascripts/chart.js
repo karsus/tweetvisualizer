@@ -84,7 +84,7 @@ var chart = (function() {
                 return d.data.name.substring(0, d.r / 3);
             })
             .style("font-size", function(d) {
-                return Math.min(2 * d.r, (2 * d.r - 8) / this.getComputedTextLength() * 14) + "px";
+                return Math.min(2 * d.r, (2 * d.r - 12) / this.getComputedTextLength() * 14) + "px";
             })
             .style("text-anchor", "middle")
             .attr("dy", ".35em");

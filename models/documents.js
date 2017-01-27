@@ -9,17 +9,17 @@ var linkifyHtml = require('linkifyjs/html');
     and parses results
 **/
 
-function getSearchResults(tag,exclude) {
+function getSearchResults(lfilter,tag,exclude) {
     console.log("search results");
     return new Promise(function(resolve, reject) {
         client.search({
             index: "twitterdata",
-            body: getQuery(tag,exclude)
+            body: getQuery(lfilter,tag,exclude)
         }).then(function(resp) {
             if (resp.aggregations.tags.buckets.length === 0) {
                 console.log("no data");
                 if (tag.length === 0) reject("no data");
-                getSearchResults(tag,true).then(function(res) {
+                getSearchResults(lfilter,tag,true).then(function(res) {
                     resolve(res);
                 }, function(err) {
                     reject(err);
@@ -36,22 +36,49 @@ function getSearchResults(tag,exclude) {
 
 };
 
-function getQuery(tags,exclude) {
+function getQuery(lfilter,tags,exclude) {
     var query = "";
-
     if (tags) {
-        var filters = buildTermsQuery(tags);
+        var filters = buildTermsQuery(lfilter,tags);
         if(exclude)tags.pop();
         var tagsString = JSON.stringify(tags);
         query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30,\"exclude\":" + tagsString + "} } } }";
     } else {
-        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } } ] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30,\"exclude\":\"porn\" } } } }"
+        var locFilter=getLocationFilter(lfilter);
+        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } }" +locFilter+"] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30,\"exclude\":\"porn\" } } } }"
     }
     console.log(query);
     return query;
 }
+function getLocationFilter(lfilter){
+    var locationFilter="";
+    var hash=getLocationCode(lfilter);
+    if(hash!=="All"){   
+       locationFilter= ",{ \"term\": { \"place.country_code\":\""+hash+"\"} }";
+    }
+    return locationFilter;
 
-function buildTermsQuery(tags) {
+}
+
+function getLocationCode(lfilter){
+    var hash="All";  
+    switch(lfilter){
+            case "US":
+                hash="US";
+                break;
+            case "UK":
+                hash="GB";
+                break;
+            case "IN":
+                hash="IN";
+                break;
+            case "default":
+                hash="All";
+        }
+    return hash;
+}
+
+function buildTermsQuery(lfilter,tags) {
     var termsFilters = [];
     tags.forEach(function(entry) {
         var termObj = {};
@@ -65,6 +92,15 @@ function buildTermsQuery(tags) {
     var lobj = {};
     lobj.term = engLang;
     termsFilters.push(lobj);
+    var hash=getLocationCode(lfilter);
+    if(hash!=="All"){       
+        var location = {};
+        location['place.country_code'] = hash;
+        var locobj = {};
+        locobj.term=location;
+        termsFilters.push(locobj);
+    }
+    
     var filters = JSON.stringify(termsFilters);
     return filters
 }

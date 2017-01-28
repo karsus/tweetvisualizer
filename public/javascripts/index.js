@@ -97,7 +97,7 @@ var main = (function() {
     });
 
     function addActiveClass() {
-        var hashVal =  window.location.hash.substr(1);
+        var hashVal = window.location.hash.substr(1);
         switch (hashVal) {
             case "US":
                 hash = "US";

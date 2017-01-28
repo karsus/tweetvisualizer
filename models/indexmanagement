@@ -14,7 +14,7 @@ exports.manageIndices = schedule.scheduleJob('0 * * * *', function() {
 
 function getCurrentTimeMinusTwoHours() {
     var d = new Date();
-    d.setHours(d.getHours() - 2);
+    d.setHours(d.getHours() - 5);
     var dateStr = moment.utc(d).format('YYYY-MM-DD-HH');
     var baseMoment = moment(dateStr, "YYYY-MM-DD-HH", true);
     return baseMoment;

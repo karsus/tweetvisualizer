@@ -51,8 +51,18 @@ var main = (function() {
     $(document).ready(function() {
         addActiveClass();
         module.getData();
+        hookupNavClick();
     });
 
+    function hookupNavClick() {
+        $('.nav-sidebar').click(function(e) {
+            if (hash === window.location.hash.substr(1)) {
+                addActiveClass();
+                resetBreadCrumb();
+                e.preventDefault();
+            }
+        });
+    }
 
     function updateBreadCrumb(data, parents) {
         tags = $.parseJSON(parents);

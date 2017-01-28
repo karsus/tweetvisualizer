@@ -59,7 +59,7 @@ var main = (function() {
             if (hash === window.location.hash.substr(1)) {
                 addActiveClass();
                 resetBreadCrumb();
-                e.preventDefault();
+
             }
         });
     }
@@ -130,8 +130,10 @@ var main = (function() {
     }
 
     $(window).bind('hashchange', function() {
-        addActiveClass();
-        resetBreadCrumb();
+        if (hash !== window.location.hash.substr(1)) {
+            addActiveClass();
+            resetBreadCrumb();
+        }
     });
     return module;
 })()

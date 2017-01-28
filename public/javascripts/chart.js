@@ -4,7 +4,7 @@
 var chart = (function() {
     "use strict";
     var module = {};
-    var diameter = screen.width > 1500 ? 960 : 720;
+    var diameter = screen.width > 1500 ? 960 : 760;
     var tooltip = d3.select("body")
         .append("div")
         .style("position", "absolute")
@@ -141,12 +141,19 @@ var chart = (function() {
 
         }
         var dataset = processData(pts);
+        var bsize=diameter;
+        if(pts.buckets.length===1&&screen.width>800){
+            bsize=diameter-150;
+        }
         var bubble = d3.pack(dataset)
-            .size([diameter, diameter])
+            .size([bsize, bsize])
             .padding(1.5);
         var nodes = d3.hierarchy(dataset)
             .sum(function(d) {
                 return d.size;
+            })
+            .sort(function(a, b) { 
+                return b.value - a.value; 
             });
 
         if (refresh) {

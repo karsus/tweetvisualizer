@@ -16,8 +16,9 @@ var chart = (function() {
         .style("border-radius", "6px")
         .style("font", "12px sans-serif")
         .text("tooltip");
-    if (screen.width< diameter) {
-        diameter = screen.width - 50;
+    var avail=$('.container-fluid').width();
+    if (avail< diameter) {
+        diameter =avail - 50;
     }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);

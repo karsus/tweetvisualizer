@@ -52,9 +52,13 @@ var main = (function() {
         addActiveClass();
         module.getData();
         hookupNavClick();
+        
     });
 
     function hookupNavClick() {
+        if(screen.width<800){
+            $('.nav-sidebar').toggle();
+        }
         $('.nav-sidebar').click(function(e) {
             if (hash === window.location.hash.substr(1) && e.target['id'] !== "loc") {
                 addActiveClass();
@@ -128,7 +132,6 @@ var main = (function() {
         }
 
     }
-
     $(window).bind('hashchange', function() {
         if (hash !== window.location.hash.substr(1)) {
             addActiveClass();

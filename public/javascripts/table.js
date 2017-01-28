@@ -20,15 +20,22 @@ var table = (function() {
                         field: 'time',
                         title: 'Time',
                         formatter: function(value) {
-                            var options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+                            var options = {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            };
                             return new Date(value).toLocaleTimeString('en-US', options);
                         }
                     },
 
                     {
                         field: 'text',
-                        title: 'Tweet',
-                        width:"70%"
+                        title: 'Tweet'
+
                     }
                 ],
                 formatLoadingMessage: function() {
@@ -38,21 +45,21 @@ var table = (function() {
             });
         }
     }
-    
+
     function format_time(date_obj) {
-  // formats a javascript Date object into a 12h AM/PM time string
-  var hour = date_obj.getHours();
-  var minute = date_obj.getMinutes();
-  var amPM = (hour > 11) ? "pm" : "am";
-  if(hour > 12) {
-    hour -= 12;
-  } else if(hour == 0) {
-    hour = "12";
-  }
-  if(minute < 10) {
-    minute = "0" + minute;
-  }
-  return hour + ":" + minute + amPM;
-}
+        // formats a javascript Date object into a 12h AM/PM time string
+        var hour = date_obj.getHours();
+        var minute = date_obj.getMinutes();
+        var amPM = (hour > 11) ? "pm" : "am";
+        if (hour > 12) {
+            hour -= 12;
+        } else if (hour == 0) {
+            hour = "12";
+        }
+        if (minute < 10) {
+            minute = "0" + minute;
+        }
+        return hour + ":" + minute + amPM;
+    }
     return module;
 })();

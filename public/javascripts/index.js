@@ -33,7 +33,7 @@ var main = (function() {
             dataType: 'json',
             cache: false,
             success: function(json) {
-                $(".se-pre-con").fadeOut("slow");;
+                $(".se-pre-con").fadeOut("slow");
                 if (data) {
                     tags[data] = true;
                     if (!updateBreadCrumb) {
@@ -44,7 +44,7 @@ var main = (function() {
                 table.fillTable(json, refresh);
             },
             error: function() {
-                alert("Error");
+                $(".se-pre-con").fadeOut("slow");
             }
         });
     }
@@ -56,7 +56,7 @@ var main = (function() {
 
     function hookupNavClick() {
         $('.nav-sidebar').click(function(e) {
-            if (hash === window.location.hash.substr(1)) {
+            if (hash === window.location.hash.substr(1) && e.target['id'] !== "loc") {
                 addActiveClass();
                 resetBreadCrumb();
 

@@ -15,6 +15,13 @@ var table = (function() {
                             return '<div class="cell"><img src=' + value + '/></div>';
                         }
                     },
+                    {
+                        field: 'name',
+                        title: 'Name',
+                        formatter: function(value) {
+                            return value;
+                        }
+                    },
 
                     {
                         field: 'time',
@@ -35,7 +42,6 @@ var table = (function() {
                     {
                         field: 'text',
                         title: 'Tweet'
-
                     }
                 ],
                 formatLoadingMessage: function() {
@@ -44,22 +50,12 @@ var table = (function() {
                 data: data.table
             });
         }
+        checkToHideNameColumn();
     }
-
-    function format_time(date_obj) {
-        // formats a javascript Date object into a 12h AM/PM time string
-        var hour = date_obj.getHours();
-        var minute = date_obj.getMinutes();
-        var amPM = (hour > 11) ? "pm" : "am";
-        if (hour > 12) {
-            hour -= 12;
-        } else if (hour == 0) {
-            hour = "12";
+   function checkToHideNameColumn(){
+        if(screen.width<800){
+            $('#tweetstable').bootstrapTable("hideColumn", "name");
         }
-        if (minute < 10) {
-            minute = "0" + minute;
-        }
-        return hour + ":" + minute + amPM;
     }
     return module;
 })();

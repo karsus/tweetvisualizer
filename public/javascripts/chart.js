@@ -17,7 +17,7 @@ var chart = (function() {
         .style("font", "12px sans-serif")
         .text("tooltip");
     if (screen.width-184 < diameter) {
-        diameter = screen.width - 190;
+        diameter = screen.width - 200;
     }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);

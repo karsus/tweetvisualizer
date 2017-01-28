@@ -16,8 +16,8 @@ var chart = (function() {
         .style("border-radius", "6px")
         .style("font", "12px sans-serif")
         .text("tooltip");
-    if (screen.width < diameter) {
-        diameter = screen.width - 50;
+    if (screen.width-184 < diameter) {
+        diameter = screen.width - 185;
     }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);

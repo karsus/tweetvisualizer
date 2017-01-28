@@ -80,7 +80,7 @@ var main = (function() {
         var href = $('<a/>', {
             text: data,
             id: json,
-            href: "#",
+            href: "javascript:void(0)",
             click: function(e, element) {
                 updateBreadCrumb($(this).text(), $(this).attr('id'))
             }

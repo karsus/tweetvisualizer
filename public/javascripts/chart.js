@@ -4,7 +4,7 @@
 var chart = (function() {
     "use strict";
     var module = {};
-    var diameter = screen.width > 1500 ? 960 : 800;
+    var diameter = screen.width > 1500 ? 960 : 720;
     var tooltip = d3.select("body")
         .append("div")
         .style("position", "absolute")

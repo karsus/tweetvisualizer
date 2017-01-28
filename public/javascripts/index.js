@@ -56,6 +56,10 @@ var main = (function() {
     });
 
     function hookupNavClick() {
+        var avail=$('.container-fluid').width()
+        if(avail<800){
+            $('.nav-sidebar').hide();
+        }
         $('.nav-sidebar').click(function(e) {
             if (hash === window.location.hash.substr(1) && e.target['id'] !== "loc") {
                 addActiveClass();

@@ -57,7 +57,7 @@ var main = (function() {
 
     function hookupNavClick() {
         $('.nav-sidebar').click(function(e) {
-            if (hash === window.location.hash.substr(1) && e.target['id'] !== "loc") {
+            if (e.target['id'] !== "loc" && hash === e.target.parentElement.id) {
                 addActiveClass();
                 resetBreadCrumb();
                 hash=window.location.hash.substr(1);

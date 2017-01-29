@@ -16,9 +16,9 @@ var chart = (function() {
         .style("border-radius", "6px")
         .style("font", "12px sans-serif")
         .text("tooltip");
-    
-    var  diameter =$('#tweetstable').width();
-    
+
+    var diameter = $('#tweetstable').width();
+
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")
@@ -138,12 +138,11 @@ var chart = (function() {
         if (refresh) {
             svg.selectAll(".hyper").remove();
             svg.selectAll("a").remove();
-
         }
         var dataset = processData(pts);
-        var bsize=diameter;
-        if(pts.buckets.length===1&&screen.width>800){
-            bsize=diameter-150;
+        var bsize = diameter;
+        if (pts.buckets.length === 1 && screen.width > 700) {
+            bsize = diameter - 150;
         }
         var bubble = d3.pack(dataset)
             .size([bsize, bsize])
@@ -152,8 +151,8 @@ var chart = (function() {
             .sum(function(d) {
                 return d.size;
             })
-            .sort(function(a, b) { 
-                return b.value - a.value; 
+            .sort(function(a, b) {
+                return b.value - a.value;
             });
 
         if (refresh) {

@@ -16,9 +16,11 @@ var chart = (function() {
         .style("border-radius", "6px")
         .style("font", "12px sans-serif")
         .text("tooltip");
-
-    var diameter = $('#tweetstable').width();
-
+  
+    var tableSize = $('#tweetstable').width();
+    if(tableSize<diameter){
+        diameter=tableSize;
+    }
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")

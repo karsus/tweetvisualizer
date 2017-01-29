@@ -44,7 +44,7 @@ var table = (function() {
                         title: 'Tweet',
                         cellStyle:function cellStyle(value, row, index, field) {
                               return {
-                                classes: 'word-wrap: break-word;min-width: 160px;max-width: 160px;white-space:normal;'
+                                classes: 'word-wrap: break-word;white-space:normal !important;'
                                 
                               };
                             }

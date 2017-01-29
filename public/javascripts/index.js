@@ -60,7 +60,7 @@ var main = (function() {
             if (hash === window.location.hash.substr(1) && e.target['id'] !== "loc") {
                 addActiveClass();
                 resetBreadCrumb();
-
+                hash=window.location.hash.substr(1);
             }
         });
     }

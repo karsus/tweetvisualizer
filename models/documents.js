@@ -42,7 +42,7 @@ function getQuery(lfilter,tags,exclude) {
         var filters = buildTermsQuery(lfilter,tags);
         if(exclude)tags.pop();
         var tagsString = JSON.stringify(tags);
-        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\n\"aggs\": { \"tags\": { \"terms\": { \"field\":                   \"entities.hashtags.text\", \"size\": 30,\"exclude\":" + tagsString + "} } } }";
+        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\"sort\": { \"@timestamp\": { \"order\": \"desc\" }},\n\"aggs\": { \"tags\": { \"terms\": { \"field\":\"entities.hashtags.text\", \"size\": 30,\"exclude\":" + tagsString + "} } } }";
     } else {
         var locFilter=getLocationFilter(lfilter);
         query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } }" +locFilter+"] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30,\"exclude\":\"porn\" } } } }"

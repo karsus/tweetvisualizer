@@ -144,7 +144,7 @@ var chart = (function() {
         }
         var dataset = processData(pts);
         var bsize=diameter;
-        if (pts.buckets.length === 1&& diameter>600) {
+        if (pts.buckets.length <= 2&& diameter>600) {
             bsize = diameter-200;
             svg.attr("height", diameter-200);
             svgresized=true;

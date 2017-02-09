@@ -23,13 +23,13 @@ var chart = (function() {
         diameter=tableSize;
     }
     var adjusth=200;
-    
+    var svgh=diameter>700:200:0;
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")
         .append("svg")
         .attr("width", diameter)
-        .attr("height", diameter-adjusth)
+        .attr("height", diameter-svgh)
         .attr("class", "bubble");
 
     function isTouchDevice() {

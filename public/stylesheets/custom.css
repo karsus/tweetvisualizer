@@ -106,3 +106,13 @@ img {
     background-color: #2494be;
     border: 1px solid #2494be
 }
+
+svg{display:block;}
+
+@media(max-width: 1200px) {
+  h2 {
+    font-size: 14pt;
+  }
+}
+
+ 

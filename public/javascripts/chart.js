@@ -23,8 +23,7 @@ var chart = (function() {
         diameter=tableSize;
     }
     var adjusth=200;
-    var svgh=screen.availWidth>700?200:0;
-    alert(diameter);
+    var svgh=diameter>700?200:20;
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")
@@ -146,7 +145,7 @@ var chart = (function() {
             svg.selectAll("a").remove();
         }
         var dataset = processData(pts);
-        var bsize = diameter-adjusth;
+        var bsize = diameter-svgh;
         if (pts.buckets.length === 1&& diameter>700) {
             bsize = diameter - (adjusth+100);
             svg.attr("height", diameter-(adjusth+100));

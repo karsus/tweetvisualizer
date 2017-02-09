@@ -4,7 +4,7 @@
 var chart = (function() {
     "use strict";
     var module = {};
-    var diameter = 750;
+    var diameter = screen.availHeight;
     var svgresized=false;
     var tooltip = d3.select("body")
         .append("div")
@@ -22,14 +22,12 @@ var chart = (function() {
     if(tableSize<diameter){
         diameter=tableSize;
     }
-    var adjusth=200;
-    var svgh=diameter>700?200:0;
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")
         .append("svg")
         .attr("width", diameter)
-        .attr("height", diameter-svgh)
+        .attr("height", diameter)
         .attr("class", "bubble");
 
     function isTouchDevice() {
@@ -145,13 +143,13 @@ var chart = (function() {
             svg.selectAll("a").remove();
         }
         var dataset = processData(pts);
-        var bsize = diameter-svgh;
-        if (pts.buckets.length === 1&& diameter>700) {
-            bsize = diameter - (adjusth+100);
-            svg.attr("height", diameter-(adjusth+100));
+        var bsize=diameter;
+        if (pts.buckets.length === 1&& diameter>600) {
+            bsize = diameter-150;
+            svg.attr("height", diameter-150);
             svgresized=true;
         }else if(svgresized){
-            svg.attr("height", diameter-adjusth);
+            svg.attr("height", diameter);
         }
         var bubble = d3.pack(dataset)
             .size([bsize, bsize])

@@ -23,7 +23,7 @@ var chart = (function() {
         diameter=tableSize;
     }
     var adjusth=200;
-    var svgh=diameter>700?200:20;
+    var svgh=diameter>700?200:5;
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")

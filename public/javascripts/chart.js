@@ -4,7 +4,7 @@
 var chart = (function() {
     "use strict";
     var module = {};
-    var diameter = screen.availHeight;
+    var diameter = screen.availWidth>screen.availHeight>screen.availHeight:screen.availWidth;
     var svgresized=false;
     var tooltip = d3.select("body")
         .append("div")

@@ -24,6 +24,7 @@ var chart = (function() {
     }
     var adjusth=200;
     var svgh=screen.availWidth>700?200:0;
+    alert(diameter);
     var format = d3.format(",d"),
         color = d3.scaleOrdinal(d3.schemeCategory20);
     var svg = d3.select("#chart")

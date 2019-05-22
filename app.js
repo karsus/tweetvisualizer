@@ -9,7 +9,7 @@ var users = require('./routes/users');
 var documents = require('./models/documents');
 var indexMgmt = require('./models/indexmanagement');
 var app = express();
-
+app.listen(8080);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

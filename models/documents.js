@@ -42,10 +42,10 @@ function getQuery(lfilter,tags,exclude) {
         var filters = buildTermsQuery(lfilter,tags);
         if(exclude)tags.pop();
         var tagsString = JSON.stringify(tags);
-        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + "} },\"sort\": { \"@timestamp\": { \"order\": \"desc\" }},\n\"aggs\": { \"tags\": { \"terms\": { \"field\":\"entities.hashtags.text\", \"size\": 30,\"exclude\":" + tagsString + "} } } }";
+        query = "{ \"size\": 30, \"query\": { \"bool\": { \"must\":" + filters + ",\"must_not\":[{ \"terms\": { \"user.screen_name.keyword\": [\"propertiesindia\" ]} }]} },\"sort\": { \"@timestamp\": { \"order\": \"desc\" }},\n\"aggs\": { \"tags\": { \"terms\": { \"field\":\"entities.hashtags.text.keyword\", \"size\": 30,\"exclude\":" + tagsString + "} } } }";
     } else {
         var locFilter=getLocationFilter(lfilter);
-        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } }" +locFilter+"] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text\", \"size\": 30,\"exclude\":\"porn\" } } } }"
+        query = "{ \"size\": 50, \"query\": { \"bool\": { \"must\": [ { \"term\": { \"lang\": \"en\" } }" +locFilter+"],\"must_not\":[{ \"terms\": { \"user.screen_name.keyword\": [\"propertiesindia\" ]} }] } }, \"sort\": { \"@timestamp\": { \"order\": \"desc\" }}, \"aggs\": { \"tags\": { \"terms\": { \"field\": \"entities.hashtags.text.keyword\", \"size\": 30,\"exclude\":\"porn\" } } } }"
     }
     console.log(query);
     return query;
@@ -54,7 +54,7 @@ function getLocationFilter(lfilter){
     var locationFilter="";
     var hash=getLocationCode(lfilter);
     if(hash!=="All"){   
-       locationFilter= ",{ \"term\": { \"place.country_code\":\""+hash+"\"} }";
+       locationFilter= ",{ \"term\": { \"place.country_code.keyword\":\""+hash+"\"} }";
     }
     return locationFilter;
 
@@ -82,7 +82,7 @@ function buildTermsQuery(lfilter,tags) {
     var termsFilters = [];
     tags.forEach(function(entry) {
         var termObj = {};
-        termObj['entities.hashtags.text'] = entry;
+        termObj['entities.hashtags.text.keyword'] = entry;
         var obj = {};
         obj.term = termObj;
         termsFilters.push(obj);
@@ -95,7 +95,7 @@ function buildTermsQuery(lfilter,tags) {
     var hash=getLocationCode(lfilter);
     if(hash!=="All"){       
         var location = {};
-        location['place.country_code'] = hash;
+        location['place.country_code.keyword'] = hash;
         var locobj = {};
         locobj.term=location;
         termsFilters.push(locobj);

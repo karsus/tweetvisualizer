@@ -12,7 +12,7 @@ var table = (function() {
                         field: 'image',
                         title: 'User',
                         formatter: function(value) {
-                            return '<div class="cell"><img src=' + value + '/></div>';
+                            return '<div class="cell"><img src=' + value + '></div>';
                         }
                     },
                     {

@@ -9,4 +9,5 @@ This application uses the [Express](https://expressjs.com/) framework , [Bootstr
 3. Data can be explored using charts
 
 ## ScreenShots
-![alt tag](https://cloud.githubusercontent.com/assets/23145157/23626565/564f8c76-027b-11e7-8cf0-79c718b94ee3.png)
+![alt tag](https://user-images.githubusercontent.com/23145157/58148717-b175fa80-7c14-11e9-9c43-3145bb850dd3.png)
+![alt tag](https://user-images.githubusercontent.com/23145157/58148784-f863f000-7c14-11e9-8577-8ab542cf5516.png)
